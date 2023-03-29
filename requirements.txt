@@ -1,0 +1,5 @@
+pandas
+numpy
+six
+matplotlib
+-e .
