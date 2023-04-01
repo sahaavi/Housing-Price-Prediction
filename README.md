@@ -20,11 +20,13 @@ This project is an end-to-end machine learning project that involves building a 
 
 **logger.py**
 
-> Deals with login.
+> Deals with logging. In commercial software products logging is actually crucial because logging allows to detect bugs sooner, it allows to traceback easily when a problem occurs.
 
 **exception.py**
 
-> Deals with exception handling.
+> Deals with exception handling.  
+`exc.info()` This function returns the old-style representation of the handled exception. If an exception e is currently handled (so exception() would return e), exc_info() returns the tuple (type(e), e, e.\__traceback__). That is, a tuple containing the type of the exception (a subclass of BaseException), the exception itself, and a traceback object which typically encapsulates the call stack at the point where the exception last occurred.  
+If no exception is being handled anywhere on the stack, this function return a tuple containing three None values.
 
 **utils.py**
 
