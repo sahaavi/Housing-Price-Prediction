@@ -1,5 +1,6 @@
 pandas
 numpy
-six
 matplotlib
+scikit-learn
+folium
 -e .
