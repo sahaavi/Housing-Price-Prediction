@@ -131,3 +131,6 @@ dmypy.json
 
 # Text
 .txt
+
+# pickle
+.pkl
