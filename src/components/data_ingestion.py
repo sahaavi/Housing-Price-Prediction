@@ -16,17 +16,17 @@ from src.logger import logging
 
 # source dataset root url
 DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml/master/datasets/housing"
-HOUSING_PATH = "../../data/raw" # local data saving path
+HOUSING_PATH = "data/raw" # local data saving path
 # specific dataset url
 HOUSING_URL = DOWNLOAD_ROOT + "/housing.tgz"
 # loading dataset path
-data_path = "../../data/raw/housing.csv"
+data_path = "data/raw/housing.csv"
 
 @dataclass
 class DataIngestionConfig:
     train_data_path: str=os.path.join('data/train',"train.csv")
     test_data_path: str=os.path.join('data/test',"test.csv")
-    raw_data_path: str=os.path.join('data/raw',"raw_data.csv")
+    # raw_data_path: str=os.path.join('data/raw',"raw_data.csv")
 
 class DataIngestion:
     def __init__(self):
@@ -36,9 +36,9 @@ class DataIngestion:
         """
         This method will download the dataset from the source
         """
-        # if not os.path.isdir(path):
-            # os.makedirs(path, exist_ok=True)
-        os.makedirs(os.path.dirname(self.ingestion_config.raw_data_path),exist_ok=True)
+        if not os.path.isdir(path):
+            os.makedirs(path, exist_ok=True)
+        # os.makedirs(os.path.dirname(self.ingestion_config.raw_data_path),exist_ok=True)
         tgz_path = os.path.join(path, "raw_data.tgz")
         urllib.request.urlretrieve(url, tgz_path)
         tgz = tarfile.open(tgz_path)
