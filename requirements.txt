@@ -3,4 +3,5 @@ numpy
 matplotlib
 scikit-learn
 folium
+pickle
 -e .
