@@ -122,7 +122,9 @@ class DataTransformation:
                 obj = preprocessor
             )
 
-            return train_prepared, test_prepared, self.data_transformation_config.preprocessor_obj_path
+            logging.info("Preprocessor object saved successfully as Pcikle file")
+
+            return train_prepared, test_prepared
 
         except Exception as e:
             raise CustomException(e, sys)
