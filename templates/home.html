@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Housing Price Prediction</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+	<div class="container">
+		<div class="row justify-content-center align-items-center vh-100">
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-header">
+						<h1 class="text-center">Housing Price Prediction</h1>
+					</div>
+					<div class="card-body">
+						<form action="{{ url_for('predict_datapoint')}}" method="post">
+							<div class="form-group">
+								<label for="longitude">Longitude:</label>
+								<input type="text" class="form-control" id="longitude" name="longitude" required>
+								<label for="latitude">Latitude:</label>
+								<input type="text" class="form-control" id="latitude" name="latitude" required>
+								<label for="housing_median_age">Housing Median Age:</label>
+								<input type="text" class="form-control" id="housing_median_age" name="housing_median_age" required>
+								<label for="total_rooms">Total Rooms:</label>
+								<input type="text" class="form-control" id="total_rooms" name="total_rooms" required>
+								<label for="total_bedrooms">Total Bedrooms:</label>
+								<input type="text" class="form-control" id="total_bedrooms" name="total_bedrooms" required>
+								<label for="population">Population:</label>
+								<input type="text" class="form-control" id="population" name="population" required>
+                                <label for="households">Households:</label>
+								<input type="text" class="form-control" id="households" name="households" required>
+                                <label for="median_income">Median Income:</label>
+								<input type="text" class="form-control" id="median_income" name="median_income" required>
+                                <label for="ocean_proximity">Ocean Proximity</label>
+								<!-- <input type="text" class="form-control" id="ocean_proximity" name="ocean_proximity" required> -->
+                                <select class="form-control" name="ocean_proximity" placeholder="" required>
+                                <option class="placeholder" selected disabled value="">Select Ocean Proximity</option>
+                                <option value="<1H OCEAN">
+                                    &lt;1H OCEAN
+                                </option>
+                                <option value="INLAND">
+                                    INLAND
+                                </option>
+                                <option value="ISLAND">
+                                    ISLAND
+                                </option>
+                                <option value="NEAR BAY">
+                                    NEAR BAY
+                                </option>
+                                <option value="NEAR OCEAN">
+                                    NEAR OCEAN
+                                </option>
+                            </select>
+
+
+
+
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block btn-lg">Predict</button>
+
+            </form>
+          </div>
+          <p style="text-align:center;"><strong>Median House Value: {{prediction}}</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

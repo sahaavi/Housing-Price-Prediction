@@ -42,14 +42,44 @@ class ModelTrainer:
                 "Gradient Boosting": GradientBoostingRegressor(),
             }
 
+            params={
+                "Decision Tree": {
+                    'criterion':['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                    # 'splitter':['best','random'],
+                    # 'max_features':['sqrt','log2'],
+                },
+                "Random Forest":{
+                    # 'criterion':['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                 
+                    # 'max_features':['sqrt','log2',None],
+                    'n_estimators': [8,16,32,64,128,256]
+                },
+                "Gradient Boosting":{
+                    # 'loss':['squared_error', 'huber', 'absolute_error', 'quantile'],
+                    'learning_rate':[.1,.01,.05,.001],
+                    'subsample':[0.6,0.7,0.75,0.8,0.85,0.9],
+                    # 'criterion':['squared_error', 'friedman_mse'],
+                    # 'max_features':['auto','sqrt','log2'],
+                    'n_estimators': [8,16,32,64,128,256]
+                },
+                "Linear Regression":{},
+                "AdaBoost Classifier":{
+                    'learning_rate':[.1,.01,0.5,.001],
+                    # 'loss':['linear','square','exponential'],
+                    'n_estimators': [8,16,32,64,128,256]
+                }
+            }
+
             model_report:dict=evaluate_models(X_train=X_train, 
                                               y_train=y_train,
                                               X_test=X_test,
                                               y_test=y_test,
-                                              models=models)
+                                              models=models,
+                                              params=params)
 
             # get the besq model score
-            best_model_score = max(sorted(model_report.values()))
+            # best_model_score = max(sorted(model_report.values())) # for r2_score
+            best_model_score = min(sorted(model_report.values())) # for root mean_squared_error
             # get the best model name
             best_model_name = list(model_report.keys())[
                 list(model_report.values()).index(best_model_score)
@@ -57,8 +87,9 @@ class ModelTrainer:
             logging.info(f"Best model name: {best_model_name}")
             best_model = models[best_model_name]
 
-            if best_model_score < 0.6:
-                raise CustomException("Best model score is less than 0.6")
+            # for r2_score
+            # if best_model_score < 0.6:
+            #     raise CustomException("Best model score is less than 0.6")
             
             logging.info("Indexed the best model")
 
@@ -68,7 +99,7 @@ class ModelTrainer:
             )
 
             # prediction = best_model.predict(X_test)
-            # r2_square = r2_score(y_test, prediction)
+            # r_square = r2_score(y_test, prediction)
             return best_model_score
 
         except Exception as e:
