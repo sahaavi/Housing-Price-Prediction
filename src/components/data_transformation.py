@@ -18,26 +18,6 @@ class DataTransformationConfig:
     # storing pickle file path
     preprocessor_obj_path: str=os.path.join('data/model',"preprocessor.pkl")
 
-# column index
-rooms_ix, bedrooms_ix, population_ix, household_ix = 3, 4, 5, 6
-
-class CombinedAttributesAdder(BaseEstimator, TransformerMixin):
-    def __init__(self, add_bedrooms_per_room = True): # no *args or **kargs
-        self.add_bedrooms_per_room = add_bedrooms_per_room
-    def fit(self, X, y=None):
-        return self # nothing else to do
-    def transform(self, X, y=None):
-        # X is a numpy array containing all the data
-        rooms_per_household = X[:, rooms_ix] / X[:, household_ix]
-        population_per_household = X[:, population_ix] / X[:, household_ix]
-        if self.add_bedrooms_per_room:
-            bedrooms_per_room = X[:, bedrooms_ix] / X[:, rooms_ix]
-            # np.c_ is the numpy concatenate function
-            return np.c_[X, rooms_per_household, population_per_household,
-                         bedrooms_per_room]
-        else:
-            return np.c_[X, rooms_per_household, population_per_household]
-
 class DataFrameSelector(BaseEstimator, TransformerMixin):
     """
     This class will select the required columns from the dataset
@@ -69,13 +49,12 @@ class DataTransformation:
         try:
             numerical_columns = ['longitude', 'latitude', 'housing_median_age', 
                                  'total_rooms', 'total_bedrooms', 'population', 
-                                 'households', 'median_income', 'median_house_value']
+                                 'households', 'median_income']
             categorical_columns = ['ocean_proximity']
 
             num_pipeline = Pipeline([
                 ('selector', DataFrameSelector(numerical_columns)),
                 ('imputer', SimpleImputer(strategy="median")),
-                ('attribs_adder', CombinedAttributesAdder()),
                 ('std_scaler', StandardScaler()),
             ])
             logging.info("Numerical pipeline created")
@@ -104,16 +83,19 @@ class DataTransformation:
             test_df = pd.read_csv(test_path)
             logging.info("Train and test data loaded successfully")
 
-            # target_feature_train = train_df["median_house_value"].copy()
-            # target_feature_test = test_df["median_house_value"].copy()
+            target_feature_train = train_df["median_house_value"].copy()
+            target_feature_test = test_df["median_house_value"].copy()
+
+            input_feature_train_df=train_df.drop(columns=["median_house_value"],axis=1)
+            input_feature_test_df=test_df.drop(columns=["median_house_value"],axis=1)
         
             preprocessor = self.get_data_transformer_object()
             logging.info("Initiated data transformation")
 
-            train_prepared = preprocessor.fit_transform(train_df)
+            train_prepared = preprocessor.fit_transform(input_feature_train_df)
             logging.info("Train data transformed successfully")
 
-            test_prepared = preprocessor.fit_transform(test_df)
+            test_prepared = preprocessor.fit_transform(input_feature_test_df)
             logging.info("Test data transformed successfully")
 
             save_object(
@@ -124,11 +106,10 @@ class DataTransformation:
 
             logging.info("Preprocessor object saved successfully as Pcikle file")
 
-            return train_prepared, test_prepared
+            train_arr = np.c_[train_prepared, np.array(target_feature_train)]
+            test_arr = np.c_[test_prepared, np.array(target_feature_test)]
+
+            return train_arr, test_arr
 
         except Exception as e:
             raise CustomException(e, sys)
-
-
-# attr_adder = CombinedAttributesAdder(add_bedrooms_per_room=False)
-# housing_extra_attribs = attr_adder.transform(housing.values)
