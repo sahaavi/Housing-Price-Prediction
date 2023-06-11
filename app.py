@@ -13,7 +13,7 @@ def index():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_datapoint():
     if request.method == 'GET':
-        return render_template('home.html')
+        return render_template('predict.html')
     else:
         data = CustomData(
             longitude=float(request.form['longitude']),
@@ -32,7 +32,7 @@ def predict_datapoint():
         pipeline = PredictPipeline()
         prediction = pipeline.predict(df)
         # render result
-        return render_template('home.html', prediction=prediction[0])
+        return render_template('predict.html', prediction=prediction[0])
     
 if __name__ == '__main__':
     app.run(debug=True)
