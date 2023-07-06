@@ -1,11 +1,9 @@
-FROM python:3.11
+FROM python:3.9
 # Copy the application code to the container
 COPY . /app
 # Set the working directory
 WORKDIR /app
 # Install application dependencies
 RUN pip install -r requirements.txt
-# Expose port 5000
-EXPOSE 8080
 # Start the application
-CMD ["python", "application.py"]
+CMD ["python3", "application.py"]
