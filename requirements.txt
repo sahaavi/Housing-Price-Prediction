@@ -3,7 +3,5 @@ numpy
 matplotlib
 scikit-learn
 folium
-pickle
 flask
-
 -e .
