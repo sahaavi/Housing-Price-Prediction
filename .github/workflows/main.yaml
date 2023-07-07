@@ -37,7 +37,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y jq unzip
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -54,15 +53,16 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_NAME }}
-          IMAGE_TAG: house-price-prediction
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_NAME:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_NAME:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-              
+          
+          
   Continuous-Deployment:
     needs: build-and-push-ecr-image
     runs-on: self-hosted
@@ -92,7 +92,7 @@ jobs:
        
       - name: Run Docker Image to serve users
         run: |
-         docker run -d -p 8080:8080 --ipc="host" --name=house-price-prediction -e 'EC2_ACCESS_KEY_ID=${{ secrets.EC2_ACCESS_KEY_ID }}' -e 'EC2_SECRET_ACCESS_KEY=${{ secrets.EC2_SECRET_ACCESS_KEY }}' -e 'EC2_REGION=${{ secrets.EC2_REGION }}'  ${{secrets.ECR_LOGIN_URI}}/${{ secrets.ECR_NAME }}:latest
+         docker run -d -p 8080:8080 --ipc="host" --name=house-price-prediction -e 'AWS_ACCESS_KEY_ID=${{ secrets.EC2_ACCESS_KEY_ID }}' -e 'AWS_SECRET_ACCESS_KEY=${{ secrets.EC2_SECRET_ACCESS_KEY }}' -e 'AWS_REGION=${{ secrets.EC2_REGION }}'  ${{secrets.ECR_LOGIN_URI}}/${{ secrets.ECR_NAME }}:latest
       - name: Clean previous images and containers
         run: |
          docker system prune -f
