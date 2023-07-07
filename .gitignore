@@ -130,7 +130,7 @@ dmypy.json
 .pyre/
 
 # Text
-.txt
+secrets.txt
 
 # pickle
 .pkl
