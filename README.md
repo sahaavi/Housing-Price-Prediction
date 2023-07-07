@@ -92,6 +92,11 @@ Copy, paste and excute each line of code on the EC2 instance.
 After Creating the runner and start the configuration experience it will ask to enter the name of the runner group we can just hit enter to skip this. Next it will ask to enter the name of the runner. We can name it self-hosted and hit enter. You can follow the following screenshot:
 ![Alt text](images/image-8.png)
 
+## APP
+![Alt text](images/image.png)
+Prediction Result
+![Alt text](images/image-9.png)
+
 ## Acknowledgments
 
 Some steps of this project built by following the steps provided in the book "[Hands-On Machine Learning with Scikit-Learn and TensorFlow](https://www.oreilly.com/library/view/hands-on-machine-learning/9781491962282/)" by [Aurélien Géron](https://github.com/ageron). The book provided clear and detailed explanations of each step, along with practical tips and best practices, and it used popular libraries such as Pandas, NumPy, Scikit-Learn, and TensorFlow to implement the code. 
