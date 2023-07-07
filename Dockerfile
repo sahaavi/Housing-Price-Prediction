@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.8.16
 # Copy the application code to the container
 COPY . /app
 # Set the working directory
